@@ -4,6 +4,8 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
 
+
+
 def get_recommendation(user_movie, df, num):
     data = df.loc[user_movie, :]
     data = data.sort_values(ascending=False)[:num]
@@ -31,6 +33,6 @@ cosine_sim_dense = pd.DataFrame(cosine_sim, index=anime_data['Tên Phim'], colum
 
 # # # Lọc theo tên Phim
 top_k = 20
-user_movie = 'Boku no Hero Academia the Movie: Futari no Hero'
+user_movie = 'Brand Blue'
 # print(get_recommendation(user_movie, cosine_sim_dense, top_k))
 
