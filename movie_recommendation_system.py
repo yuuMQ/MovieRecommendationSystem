@@ -1,9 +1,6 @@
 import pandas as pd
+import numpy as np
 
+data = pd.read_csv('MovieRecommendationSystem/data/phimmoi_movies_data.csv')
 
-# Read Data
-data = pd.read_csv('data/anime_movie.csv')
-
-# Preprocessing
-# 1. Remove NaN of Rating column
-data = data.dropna(subset=['Rating'])
+# data = pd.read_csv('data/phimmoi_movies_data.csv')
