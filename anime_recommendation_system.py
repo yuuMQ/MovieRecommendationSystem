@@ -3,6 +3,8 @@ import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
+# Item-based Collaborative Filtering
+
 
 def get_recommendation(user_movie, df, num):
     data = df.loc[user_movie, :]
