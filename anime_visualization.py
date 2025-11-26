@@ -11,7 +11,6 @@ data['Thể Loại'] = data['Thể Loại'].apply(lambda s: s.replace(' ', '').r
 top20_data = data.sort_values(by=['Rating'], ascending=False)[:20]
 
 # fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(20, 8))
-plt.figure(figsize=(20, 10))
 bars = plt.barh(range(len(top20_data)), top20_data['Rating'])
 plt.yticks(range(len(top20_data)), top20_data['Tên Phim'])
 plt.title("TOP 20 Anime Có Rating Cao Nhất Dựa Trên Rating Của Animehay", fontsize=16, fontweight='bold')
