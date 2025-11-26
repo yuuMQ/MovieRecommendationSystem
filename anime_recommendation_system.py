@@ -4,8 +4,9 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 from pprint import pprint
 
+
 # Content-based Recommendation System
-def content_based_recommendation(ori_data, data, user_movie, top_k=20):
+def content_based_recommendation(data, user_movie, top_k=20):
     vectorizer = TfidfVectorizer()
 
     tfidf_matrix = vectorizer.fit_transform(data['Thể Loại'])
@@ -15,6 +16,7 @@ def content_based_recommendation(ori_data, data, user_movie, top_k=20):
     cosine_sim_to_dense = pd.DataFrame(data=cosine_sim, index=data['Tên Phim'], columns=data['Tên Phim'])
     movie_data = cosine_sim_to_dense.loc[user_movie, :]
     movie_data = movie_data.sort_values(ascending=False)[:top_k + 1]
+
     # Remove user movie
     movie_data = movie_data[movie_data.index != user_movie]
 
@@ -30,21 +32,6 @@ def movies_detail(data, user_movie, recommendations):
 
 
 def movies_info_list(ori_data, recommendations):
-    '''
-        movies list format:
-        [{
-            Tên Phim:
-            Tên Khác:
-            Nội Dung:
-            Thể Loại:
-            Rating:
-            Số lượng đánh giá:
-            Năm Phát Hành:
-            Image:
-        },
-        ...
-        ]
-    '''
     rec_movies_list = []
     for i, movie in enumerate(recommendations.index):
         movie_details = ori_data[ori_data['Tên Phim'] == movie].iloc[0]
@@ -66,9 +53,10 @@ def movies_info_list(ori_data, recommendations):
 
 
 if __name__ == '__main__':
-    original_data = pd.read_csv('data/anime_movie.csv')
-    anime_data = pd.read_csv('data/anime_movie.csv', usecols=['Tên Phim', 'Thể Loại', 'Rating'])
-    # anime_data = pd.read_csv('MovieRecommendationSystem/data/anime_movie.csv', usecols=['Tên Phim', 'Thể Loại', 'Rating'])
+    # original_data = pd.read_csv('data/anime_movie.csv')
+    original_data = pd.read_csv('MovieRecommendationSystem/data/anime_movie.csv')
+    # anime_data = pd.read_csv('data/anime_movie.csv', usecols=['Tên Phim', 'Thể Loại', 'Rating'])
+    anime_data = pd.read_csv('MovieRecommendationSystem/data/anime_movie.csv', usecols=['Tên Phim', 'Thể Loại', 'Rating'])
 
     ### Preprocessing
     # 1. Remove nan value of Rating
@@ -77,10 +65,19 @@ if __name__ == '__main__':
     # 2. Replace ',' to ' ' of Thể Loại
     anime_data['Thể Loại'] = anime_data['Thể Loại'].apply(lambda s: s.replace(' ', '').replace(',', ' ') if isinstance(s, str) else s)
 
+    vectorizer = TfidfVectorizer()
+
+    tfidf_matrix = vectorizer.fit_transform(anime_data['Thể Loại'])
+    tfidf_matrix_to_dense = pd.DataFrame(data=tfidf_matrix.todense(), index=anime_data['Tên Phim'],
+                                         columns=vectorizer.get_feature_names_out())
+
+    cosine_sim = cosine_similarity(tfidf_matrix_to_dense)
+    cosine_sim_to_dense = pd.DataFrame(data=cosine_sim, index=anime_data['Tên Phim'], columns=anime_data['Tên Phim'])
+
     # # # Lọc theo tên Phim
     top_k = 20
     user_movie = 'Grand Blue'
-    recommendations = content_based_recommendation(original_data, anime_data, user_movie, top_k=top_k)
+    recommendations = content_based_recommendation(anime_data, user_movie, top_k=top_k)
     # movies_detail(original_data, user_movie, recommendations)
     movie_list = movies_info_list(original_data, recommendations)
     pprint(movie_list)
