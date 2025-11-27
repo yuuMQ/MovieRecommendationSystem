@@ -16,7 +16,7 @@ top_k = st.slider("Số lượng phim gợi ý:", 5, 30, 10)
 
 if st.button("Gợi Ý Ngay 🚀"):
     with st.spinner("Đang phân tích dữ liệu..."):
-        recommendations = content_based_recommendation(original_data, anime_data, user_movie, top_k)
+        recommendations = content_based_recommendation(anime_data, user_movie, top_k)
         movie_list = movies_info_list(original_data, recommendations)
 
     st.subheader(f" Các phim giống với: **{user_movie}**")
