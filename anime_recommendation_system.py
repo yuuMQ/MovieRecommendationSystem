@@ -4,7 +4,6 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 from pprint import pprint
 
-
 # Content-based Recommendation System
 def content_based_recommendation(data, user_movie, top_k=20):
     vectorizer = TfidfVectorizer()
@@ -53,10 +52,10 @@ def movies_info_list(ori_data, recommendations):
 
 
 if __name__ == '__main__':
-    # original_data = pd.read_csv('data/anime_movie.csv')
-    original_data = pd.read_csv('MovieRecommendationSystem/data/anime_movie.csv')
-    # anime_data = pd.read_csv('data/anime_movie.csv', usecols=['Tên Phim', 'Thể Loại', 'Rating'])
-    anime_data = pd.read_csv('MovieRecommendationSystem/data/anime_movie.csv', usecols=['Tên Phim', 'Thể Loại', 'Rating'])
+    original_data = pd.read_csv('data/anime_movie.csv')
+    # original_data = pd.read_csv('MovieRecommendationSystem/data/anime_movie.csv')
+    anime_data = pd.read_csv('data/anime_movie.csv', usecols=['Tên Phim', 'Nội Dung', 'Thể Loại', 'Rating'])
+    # anime_data = pd.read_csv('MovieRecommendationSystem/data/anime_movie.csv', usecols=['Tên Phim', 'Thể Loại', 'Rating'])
 
     ### Preprocessing
     # 1. Remove nan value of Rating
@@ -64,7 +63,6 @@ if __name__ == '__main__':
 
     # 2. Replace ',' to ' ' of Thể Loại
     anime_data['Thể Loại'] = anime_data['Thể Loại'].apply(lambda s: s.replace(' ', '').replace(',', ' ') if isinstance(s, str) else s)
-
     vectorizer = TfidfVectorizer()
 
     tfidf_matrix = vectorizer.fit_transform(anime_data['Thể Loại'])
@@ -76,7 +74,7 @@ if __name__ == '__main__':
 
     # # # Lọc theo tên Phim
     top_k = 20
-    user_movie = 'Grand Blue'
+    user_movie = 'NiseKoi'
     recommendations = content_based_recommendation(anime_data, user_movie, top_k=top_k)
     # movies_detail(original_data, user_movie, recommendations)
     movie_list = movies_info_list(original_data, recommendations)
