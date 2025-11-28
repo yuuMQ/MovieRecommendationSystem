@@ -3,7 +3,6 @@ import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 from pprint import pprint
-from underthesea import word_tokenize
 
 # Content-based Recommendation System
 def content_based_recommendation(data, user_description, top_k=20):
