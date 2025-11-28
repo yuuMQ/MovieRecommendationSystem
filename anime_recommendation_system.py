@@ -6,34 +6,23 @@ from pprint import pprint
 from underthesea import word_tokenize
 
 # Content-based Recommendation System
-def content_based_recommendation(data, user_movie, top_k=20):
+def content_based_recommendation(data, user_description, top_k=20):
     vectorizer = TfidfVectorizer()
 
-    tfidf_matrix = vectorizer.fit_transform(data['Thể Loại'])
-    tfidf_matrix_to_dense = pd.DataFrame(data=tfidf_matrix.todense(), index=data['Tên Phim'], columns=vectorizer.get_feature_names_out())
+    user_description = word_tokenize(user_description, format='text')
 
-    cosine_sim = cosine_similarity(tfidf_matrix_to_dense)
-    cosine_sim_to_dense = pd.DataFrame(data=cosine_sim, index=data['Tên Phim'], columns=data['Tên Phim'])
-    movie_data = cosine_sim_to_dense.loc[user_movie, :]
-    movie_data = movie_data.sort_values(ascending=False)[:top_k + 1]
+    movie_content_matrix = vectorizer.fit_transform(data['movie_content_data'])
+    user_description_matrix = vectorizer.transform([user_description])
 
-    # Remove user movie
-    movie_data = movie_data[movie_data.index != user_movie]
+    cosine_sim = cosine_similarity(movie_content_matrix, user_description_matrix).flatten()
+    top_indices = cosine_sim.argsort()[::-1][:top_k]
+    movie_data = anime_data.iloc[top_indices]
 
-    return movie_data
-
-def movies_detail(data, user_movie, recommendations):
-    print("==================MOVIES RECOMMENDATION==========================")
-    original_information = data[data['Tên Phim'] == user_movie].iloc[0]
-    print("Phim gốc: \n{}".format(original_information))
-    for i, (movie, similarity) in enumerate(recommendations.items(), 1):
-        movie_info = data[data['Tên Phim'] == movie].iloc[0]
-        print(movie_info)
-
+    return movie_data['Tên Phim'].tolist()
 
 def movies_info_list(ori_data, recommendations):
     rec_movies_list = []
-    for i, movie in enumerate(recommendations.index):
+    for movie in recommendations:
         movie_details = ori_data[ori_data['Tên Phim'] == movie].iloc[0]
 
         movie_list_info = {
@@ -53,6 +42,9 @@ def movies_info_list(ori_data, recommendations):
 
 
 if __name__ == '__main__':
+    with open('vietnamese-stopwords.txt', 'r', encoding='utf-8') as f:
+        stop_words = [w.strip() for w in f.readlines()]
+
     original_data = pd.read_csv('data/anime_movie.csv')
     # original_data = pd.read_csv('MovieRecommendationSystem/data/anime_movie.csv')
     anime_data = pd.read_csv('data/anime_movie.csv', usecols=['Tên Phim', 'Nội Dung', 'Thể Loại', 'Rating'])
@@ -60,23 +52,17 @@ if __name__ == '__main__':
 
     ### Preprocessing
     # 1. Remove nan value of Rating
-    anime_data = anime_data.dropna(subset=['Rating']).dropna(subset=['Thể Loại'])
+    anime_data = anime_data.dropna()
 
     # 2. Replace ',' to ' ' of Thể Loại
     anime_data['Thể Loại'] = anime_data['Thể Loại'].apply(lambda s: s.replace(' ', '').replace(',', ' ') if isinstance(s, str) else s)
-    vectorizer = TfidfVectorizer()
+    anime_data['movie_content_data'] = anime_data['movie_content_data'] = anime_data['Tên Phim'] + " " + anime_data['Nội Dung'] + " " + anime_data['Thể Loại']
+    anime_data['movie_content_data'] = anime_data['movie_content_data'].apply(lambda x: word_tokenize(x, format='text'))
 
-    tfidf_matrix = vectorizer.fit_transform(anime_data['Thể Loại'])
-    tfidf_matrix_to_dense = pd.DataFrame(data=tfidf_matrix.todense(), index=anime_data['Tên Phim'],
-                                         columns=vectorizer.get_feature_names_out())
+    vectorizer = TfidfVectorizer(stop_words=stop_words)
+    user_input = 'Gợi ý tôi phim có nội dung về nhân vật chính chuyển sinh vào thế giới khác có sức mạnh phi thường và đồng hành cùng dàn harem xinh đẹp'
 
-    cosine_sim = cosine_similarity(tfidf_matrix_to_dense)
-    cosine_sim_to_dense = pd.DataFrame(data=cosine_sim, index=anime_data['Tên Phim'], columns=anime_data['Tên Phim'])
 
-    # # # Lọc theo tên Phim
-    top_k = 20
-    user_movie = 'NiseKoi'
-    recommendations = content_based_recommendation(anime_data, user_movie, top_k=top_k)
-    # movies_detail(original_data, user_movie, recommendations)
-    movie_list = movies_info_list(original_data, recommendations)
-    pprint(movie_list)
+    # Vectorizer - vector hóa
+    recommendations = content_based_recommendation(anime_data, user_input)
+    pprint(movies_info_list(original_data, recommendations))

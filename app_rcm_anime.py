@@ -1,3 +1,9 @@
+'''
+    Sửa lại nhé !!!!!!!
+
+
+'''
+
 import streamlit as st
 import pandas as pd
 from anime_recommendation_system import content_based_recommendation, movies_info_list   # import từ file bạn đã viết
