@@ -9,10 +9,15 @@
 - Anime dataset was scraped from an anime web (Hope there will be no license problem :)) )
 - Scrapy was used to collect anime dataset. **[Details](https://github.com/yuuMQ/MovieRecommendationSystem/blob/main/MovieScraper/MovieScraper/spiders/anime_movie_scraper.py)**
 - We use a ***Content-based recommendation System*** for anime movies dataset:
-  - TF-IDF combined with Cosine Similarity on **Thể Loại** feature.
-  - Filtered by top-rated - **Rating** feature (rating >= 8.0 - This value can be adjusted).
-  - Recommend 20 anime movies that are the most similar to the user-selected movie. 
-### d. Demo:
+- *'Thể Loại'*, *'Nội Dung'* and *'Tên Phim'* features are merged into a *'movie_content_data' feature.  
+- The recommendation System has two different methods:
+  - TF-IDF
+  - PhoBert
+### d. Dataflow:
+![image](assets/MovieRecDataFlow.drawio.png)
+
+
+### e. Demo:
 
 --- 
 ## 2. Vietnamese and Other Movies Recommendation System: ***TO BE CONTINUE***
