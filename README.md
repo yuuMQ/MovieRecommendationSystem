@@ -4,6 +4,13 @@
 ## 1. Anime Movies Recommendation System:
 ### a. Movie Web Link: https://animehay.life/
 ### b. Report: 
+![HighestRating](MovieRecommendationSystem/assets/HighestRating.png)
+![HighestVotes](MovieRecommendationSystem/assets/HighestVotes.png)
+![RatingDistribution](MovieRecommendationSystem/assets/RatingDistribution.png)
+![NumberOfMovies](MovieRecommendationSystem/assets/NumberOfMovies.png)
+![Genres](MovieRecommendationSystem/assets/Genres.png)
+![RatingAndVotes](MovieRecommendationSystem/assets/RatingAndVotes.png)
+
 ### c. Method:
 
 - Anime dataset was scraped from an anime web (Hope there will be no license problem :)) )
