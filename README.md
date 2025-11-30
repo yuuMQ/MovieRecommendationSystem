@@ -4,12 +4,12 @@
 ## 1. Anime Movies Recommendation System:
 ### a. Movie Web Link: https://animehay.life/
 ### b. Report: 
-![HighestRating](MovieRecommendationSystem/assets/HighestRating.png)
-![HighestVotes](MovieRecommendationSystem/assets/HighestVotes.png)
-![RatingDistribution](MovieRecommendationSystem/assets/RatingDistribution.png)
-![NumberOfMovies](MovieRecommendationSystem/assets/NumberOfMovies.png)
-![Genres](MovieRecommendationSystem/assets/Genres.png)
-![RatingAndVotes](MovieRecommendationSystem/assets/RatingAndVotes.png)
+![HighestRating](assets/HighestRating.png)
+![HighestVotes](assets/HighestVotes.png)
+![RatingDistribution](assets/RatingDistribution.png)
+![NumberOfMovies](assets/NumberOfMovies.png)
+![Genres](assets/Genres.png)
+![RatingAndVotes](assets/RatingAndVotes.png)
 
 ### c. Method:
 
