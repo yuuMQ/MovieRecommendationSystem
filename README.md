@@ -2,14 +2,23 @@
 
 ---
 ## 1. Anime Movies Recommendation System:
+
+---
+
 ### a. Movie Web Link: https://animehay.life/
+
+---
+
 ### b. Report: 
 ![HighestRating](assets/HighestRating.png)
 ![HighestVotes](assets/HighestVotes.png)
+![RatingAndVotes](assets/RatingAndVotes.png)
 ![RatingDistribution](assets/RatingDistribution.png)
 ![NumberOfMovies](assets/NumberOfMovies.png)
 ![Genres](assets/Genres.png)
-![RatingAndVotes](assets/RatingAndVotes.png)
+![genres_rating](assets/genres_rating.png)
+
+---
 
 ### c. Method:
 
@@ -19,10 +28,22 @@
 - *'Thể Loại'*, *'Nội Dung'* and *'Tên Phim'* features are merged into a *'movie_content_data' feature.  
 - The recommendation System has two different methods:
   - TF-IDF
-  - PhoBert
+  - Sentence Transformer
+---
+
 ### d. Dataflow:
 ![image](assets/MovieRecDataFlow.drawio.png)
 
+---
+
+## COMPARE THE EFFECTIVENESS OF 2 METHODS:
+
+### I. TF-IDF:
+
+### II. Sentence Transformer:
+
+
+---
 
 ### e. Demo:
 
