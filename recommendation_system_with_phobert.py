@@ -2,49 +2,69 @@ import numpy as np
 import pandas as pd
 import torch
 from sklearn.metrics.pairwise import cosine_similarity
-from transformers import AutoModel, AutoTokenizer
+from sentence_transformers import SentenceTransformer
 from underthesea import word_tokenize
 import os
+from pprint import pprint
 
-def get_sentence_embedding(model, tokenizer, sentence, device='cpu'):
-    tokens = tokenizer(sentence, return_tensors='pt', truncation=True, padding=True, max_length=256)
-    tokens = {k: v.to(device) for k, v in tokens.items()}
-    with torch.no_grad():
-        outputs = model(**tokens)
-        embeddings = outputs.last_hidden_state.mean(dim=1)
-    return embeddings.cpu().numpy()
+def get_sentence_embedding(sentences, device):
+    embeddings = model.encode(
+        sentences,
+        batch_size=128,
+        show_progress_bar=True,
+        normalize_embeddings=True,
+        device=device
+    )
+    return embeddings
 
-def get_recommendation(ori_data, data, user_description, top_k=20, embedding_file_dir='anime_movies_embedding.npy'):
+def get_recommendation(data, user_description, top_k=20, embedding_file_dir='anime_movies_embedding.npy'):
     if os.path.exists(embedding_file_dir):
         movie_embeddings = np.load(embedding_file_dir)
     else:
-        movie_embeddings = []
-        for content in data['movie_content_data']:
-            emb = get_sentence_embedding(phobert, tokenizer, content)
-            movie_embeddings.append(emb[0])
+        contents = data['movie_content_data'].tolist()
+        movie_embeddings = get_sentence_embedding(contents, device=device)
         movie_embeddings = np.array(movie_embeddings)
         np.save(embedding_file_dir, movie_embeddings)
 
     description_segmented = word_tokenize(user_description, format='text')
-    query_embedding = get_sentence_embedding(phobert, tokenizer, description_segmented, device)
+    query_embedding = get_sentence_embedding([description_segmented], device=device)
 
     # Tính cosine similarity
     similarities = cosine_similarity(query_embedding, movie_embeddings)[0]
 
     top_indices = similarities.argsort()[::-1][:top_k]
+    movie_data = anime_data.iloc[top_indices]
+    return movie_data['Tên Phim'].tolist()
 
-    return ori_data.iloc[top_indices]
+def movies_info_list(ori_data, recommendations):
+    rec_movies_list = []
+    for movie in recommendations:
+        movie_details = ori_data[ori_data['Tên Phim'] == movie].iloc[0]
+
+        movie_list_info = {
+            'Tên Phim': movie_details['Tên Phim'],
+            'Tên Khác': movie_details['Tên Khác'],
+            'Nội Dung': movie_details['Nội Dung'],
+            'Thể Loại': movie_details['Thể Loại'],
+            'Rating': movie_details['Rating'],
+            'Số lượng đánh giá': movie_details['Số lượng đánh giá'],
+            'Năm Phát Hành': movie_details['Năm Phát Hành'],
+            'Image': movie_details['Image']
+        }
+        rec_movies_list.append(movie_list_info)
+
+    return rec_movies_list
 
 
 if __name__ == '__main__':
     # Initialization
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
-    phobert = AutoModel.from_pretrained("vinai/phobert-base-v2").to(device)
-    tokenizer = AutoTokenizer.from_pretrained("vinai/phobert-base-v2")
+
+    # model = SentenceTransformer('sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2')
+    model = SentenceTransformer('keepitreal/vietnamese-sbert')
 
     original_data = pd.read_csv('data/anime_movie.csv')
     anime_data = pd.read_csv('data/anime_movie.csv', usecols=['Tên Phim', 'Nội Dung', 'Thể Loại', 'Rating'])
-    # anime_data = pd.read_csv('MovieRecommendationSystem/data/anime_movie.csv', usecols=['Tên Phim', 'Nội Dung', 'Thể Loại', 'Rating'])
 
     ### Preprocessing
     # 1. Remove nan value of Rating
@@ -54,13 +74,12 @@ if __name__ == '__main__':
     # 2. Segment dataset
 
     anime_data['movie_content_data'] = anime_data['Tên Phim'] + " " + anime_data['Nội Dung'] + " " + anime_data['Thể Loại']
-    anime_data['movie_content_data'] = anime_data['movie_content_data'].apply(lambda x: word_tokenize(x, format='text'))
+    # anime_data['movie_content_data'] = anime_data['movie_content_data'].apply(lambda x: word_tokenize(x, format='text'))
 
+    user_description = 'Phim có chủ đề về nam sinh bị dịch chuyển sang dị giới cùng bạn bè và bị phản bội'
 
-
-    user_description = 'Hãy gợi ý các phim có chủ đề về tình yêu và học đường, có yếu tố siêu nhiên và siêu năng lực'
-    recommendations = get_recommendation(original_data, anime_data, user_description, top_k=20)
-    print(get_recommendation(original_data, anime_data, user_description))
+    recommendations = get_recommendation(anime_data, user_description, top_k=20)
+    pprint(movies_info_list(original_data, recommendations))
 
 
 

@@ -60,7 +60,7 @@ if __name__ == '__main__':
     anime_data['movie_content_data'] = anime_data['movie_content_data'].apply(lambda x: word_tokenize(x, format='text'))
 
     vectorizer = TfidfVectorizer(stop_words=stop_words)
-    user_input = 'Gợi ý tôi phim có nội dung về nhân vật chính chuyển sinh vào thế giới khác có sức mạnh phi thường và đồng hành cùng dàn harem xinh đẹp'
+    user_input = 'Phim có chủ đề về nam sinh bị dịch chuyển sang dị giới cùng bạn bè và bị phản bội'
 
 
     # Vectorizer - vector hóa
