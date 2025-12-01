@@ -16,7 +16,7 @@
 ![RatingDistribution](assets/RatingDistribution.png)
 ![NumberOfMovies](assets/NumberOfMovies.png)
 ![Genres](assets/Genres.png)
-![genres_rating](assets/genres_rating.png)
+![genres_rating_sorted](assets/genres_rating.png)
 
 ---
 
