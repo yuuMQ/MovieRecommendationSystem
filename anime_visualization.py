@@ -93,7 +93,7 @@ def create_genres_rating_chart(data):
     genres_data = data.assign(genres_generated=data['Thể Loại'].str.split(' ')).explode('genres_generated')
     genres_data = genres_data[~genres_data['genres_generated'].isin(['Anime', '[CNA]_Hài_hước'])]
 
-    rating_by_genres = genres_data.groupby('genres_generated')['Rating'].mean()
+    rating_by_genres = genres_data.groupby('genres_generated')['Rating'].mean().sort_values(ascending=False)
     plt.figure(figsize=(16, 10))
     sns.barplot(y=rating_by_genres.index, x=rating_by_genres.values)
     plt.title("Thống kê Rating trung bình theo Thể Loại")
