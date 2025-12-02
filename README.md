@@ -9,7 +9,9 @@
 
 ---
 
-### b. Report: 
+### b. Report:
+#### Report: [Click Here](https://www.notion.so/Movies-Recomendation-System-2ae166c00f95803db4e8cc932416cfe2?source=copy_link)
+#### Charts:
 ![HighestRating](assets/HighestRating.png)
 ![HighestVotes](assets/HighestVotes.png)
 ![RatingAndVotes](assets/RatingAndVotes.png)
