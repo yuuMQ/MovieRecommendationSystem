@@ -6,6 +6,7 @@ from transformers import AutoModel, AutoTokenizer
 from underthesea import word_tokenize
 import os
 
+
 def get_sentence_embedding(model, tokenizer, sentence, device='cpu'):
     tokens = tokenizer(sentence, return_tensors='pt', truncation=True, padding=True, max_length=256)
     tokens = {k: v.to(device) for k, v in tokens.items()}
@@ -13,6 +14,7 @@ def get_sentence_embedding(model, tokenizer, sentence, device='cpu'):
         outputs = model(**tokens)
         embeddings = outputs.last_hidden_state.mean(dim=1)
     return embeddings.cpu().numpy()
+
 
 def get_recommendation(ori_data, data, user_description, top_k=20, embedding_file_dir='anime_movies_embedding.npy'):
     if os.path.exists(embedding_file_dir):
@@ -36,6 +38,10 @@ def get_recommendation(ori_data, data, user_description, top_k=20, embedding_fil
     return ori_data.iloc[top_indices]
 
 
+device = 'cuda' if torch.cuda.is_available() else 'cpu'
+phobert = AutoModel.from_pretrained("vinai/phobert-base-v2").to(device)
+tokenizer = AutoTokenizer.from_pretrained("vinai/phobert-base-v2")
+
 if __name__ == '__main__':
     # Initialization
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
@@ -50,18 +56,14 @@ if __name__ == '__main__':
     # 1. Remove nan value of Rating
     anime_data = anime_data.dropna()
     anime_data['Thể Loại'] = anime_data['Thể Loại'].apply(lambda s: s.lower())
-    anime_data['Thể Loại'] = anime_data['Thể Loại'].apply(lambda s: s.replace(' ', '_').replace(',', ' ') if isinstance(s, str) else s)
+    anime_data['Thể Loại'] = anime_data['Thể Loại'].apply(
+        lambda s: s.replace(' ', '_').replace(',', ' ') if isinstance(s, str) else s)
     # 2. Segment dataset
 
-    anime_data['movie_content_data'] = anime_data['Tên Phim'] + " " + anime_data['Nội Dung'] + " " + anime_data['Thể Loại']
+    anime_data['movie_content_data'] = anime_data['Tên Phim'] + " " + anime_data['Nội Dung'] + " " + anime_data[
+        'Thể Loại']
     anime_data['movie_content_data'] = anime_data['movie_content_data'].apply(lambda x: word_tokenize(x, format='text'))
-
-
 
     user_description = 'Hãy gợi ý các phim có chủ đề về tình yêu và học đường, có yếu tố siêu nhiên và siêu năng lực'
     recommendations = get_recommendation(original_data, anime_data, user_description, top_k=20)
     print(get_recommendation(original_data, anime_data, user_description))
-
-
-
-
