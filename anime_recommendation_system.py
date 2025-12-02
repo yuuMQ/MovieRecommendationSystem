@@ -55,7 +55,7 @@ if __name__ == '__main__':
     anime_data = anime_data.dropna()
 
     # 2. Replace ',' to ' ' of Thể Loại
-    anime_data['Thể Loại'] = anime_data['Thể Loại'].apply(lambda s: s.replace(' ', '').replace(',', ' ') if isinstance(s, str) else s)
+    anime_data['Thể Loại'] = anime_data['Thể Loại'].apply(lambda s: s.replace(' ', '_').replace(',', ' ') if isinstance(s, str) else s)
     anime_data['movie_content_data'] = anime_data['movie_content_data'] = anime_data['Tên Phim'] + " " + anime_data['Nội Dung'] + " " + anime_data['Thể Loại']
     anime_data['movie_content_data'] = anime_data['movie_content_data'].apply(lambda x: word_tokenize(x, format='text'))
 
@@ -63,5 +63,5 @@ if __name__ == '__main__':
 
 
     # Vectorizer - vector hóa
-    recommendations = content_based_recommendation(anime_data, user_input)
+    recommendations = content_based_recommendation(anime_data, user_input, 10)
     pprint(movies_info_list(original_data, recommendations))
