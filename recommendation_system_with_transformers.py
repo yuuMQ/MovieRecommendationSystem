@@ -55,6 +55,9 @@ def movies_info_list(ori_data, recommendations):
 
     return rec_movies_list
 
+device = 'cuda' if torch.cuda.is_available() else 'cpu'
+model = SentenceTransformer('keepitreal/vietnamese-sbert')
+anime_data = pd.read_csv('data/anime_movie.csv', usecols=['Tên Phim', 'Nội Dung', 'Thể Loại', 'Rating'])
 
 if __name__ == '__main__':
     # Initialization
