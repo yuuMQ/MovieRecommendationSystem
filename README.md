@@ -33,21 +33,8 @@
 
 ### d. Dataflow:
 ![image](assets/MovieRecDataFlow.drawio.png)
-
 ---
-
-## COMPARE THE EFFECTIVENESS OF 2 METHODS:
-
-### I. TF-IDF:
-
-### II. Sentence Transformer:
-
-
----
-
-### e. Demo:
-
---- 
+ 
 ## 2. Vietnamese and Other Movies Recommendation System: ***TO BE CONTINUE***
 ### a. Movie Web Link: https://phimmoi15.net/
 ### b. Report:
