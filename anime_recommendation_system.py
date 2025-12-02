@@ -45,9 +45,6 @@ with open('vietnamese-stopwords.txt', 'r', encoding='utf-8') as f:
 vectorizer = TfidfVectorizer(stop_words=stop_words)
 
 if __name__ == '__main__':
-    with open('vietnamese-stopwords.txt', 'r', encoding='utf-8') as f:
-        stop_words = [w.strip() for w in f.readlines()]
-
     original_data = pd.read_csv('data/anime_movie.csv')
     # original_data = pd.read_csv('MovieRecommendationSystem/data/anime_movie.csv')
     anime_data = pd.read_csv('data/anime_movie.csv', usecols=['Tên Phim', 'Nội Dung', 'Thể Loại', 'Rating'])
@@ -62,7 +59,6 @@ if __name__ == '__main__':
     anime_data['movie_content_data'] = anime_data['movie_content_data'] = anime_data['Tên Phim'] + " " + anime_data['Nội Dung'] + " " + anime_data['Thể Loại']
     anime_data['movie_content_data'] = anime_data['movie_content_data'].apply(lambda x: word_tokenize(x, format='text'))
 
-    vectorizer = TfidfVectorizer(stop_words=stop_words)
     user_input = 'Phim có chủ đề về nam sinh bị dịch chuyển sang dị giới cùng bạn bè và bị phản bội'
 
 

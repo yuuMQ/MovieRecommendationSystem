@@ -55,19 +55,14 @@ def movies_info_list(ori_data, recommendations):
 
     return rec_movies_list
 
+
+# Initialization
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 model = SentenceTransformer('keepitreal/vietnamese-sbert')
 anime_data = pd.read_csv('data/anime_movie.csv', usecols=['Tên Phim', 'Nội Dung', 'Thể Loại', 'Rating'])
 
 if __name__ == '__main__':
-    # Initialization
-    device = 'cuda' if torch.cuda.is_available() else 'cpu'
-
-    # model = SentenceTransformer('sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2')
-    model = SentenceTransformer('keepitreal/vietnamese-sbert')
-
     original_data = pd.read_csv('data/anime_movie.csv')
-    anime_data = pd.read_csv('data/anime_movie.csv', usecols=['Tên Phim', 'Nội Dung', 'Thể Loại', 'Rating'])
 
     ### Preprocessing
     # 1. Remove nan value of Rating
