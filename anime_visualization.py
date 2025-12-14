@@ -53,6 +53,23 @@ def create_number_of_movies_year_more_than_10(data):
     plt.ylabel("Số Lượng Đánh Giá")
     plt.show()
 
+
+def create_number_of_movies_each_5years(data):
+    data['Năm Phát Hành'] = data['Năm Phát Hành'].astype(int)
+    data['5_years'] = (data['Năm Phát Hành'] // 5) * 5
+    movies_5_years = data['5_years'].value_counts().sort_index()
+
+    labels = [f"{year}-{year + 4}" for year in movies_5_years.index]
+
+    plt.figure(figsize=(14, 6))
+    sns.barplot(x=labels, y=movies_5_years.values)
+    plt.title("SỐ LƯỢNG PHIM THEO MỖI 5 NĂM")
+    plt.xlabel("Giai đoạn (5 năm)")
+    plt.ylabel("Số lượng phim")
+    plt.xticks(rotation=45)
+    plt.tight_layout()
+    plt.show()
+
 def create_genres_plot(data):
     genres = data['Thể Loại'].str.split(' ', expand=True).stack()
     genres_count = genres.value_counts()
@@ -101,6 +118,8 @@ def create_genres_rating_chart(data):
     plt.ylabel('Genres')
     plt.show()
 
+
+
 if __name__ == '__main__':
     data = pd.read_csv('data/anime_movie.csv', usecols=['Tên Phim', 'Thể Loại', 'Rating', 'Số lượng đánh giá', 'Năm Phát Hành'])
     data = data.dropna()
@@ -115,3 +134,4 @@ if __name__ == '__main__':
     create_top20_highest_rating_movie(data)
     create_histogram_of_rating(data)
     create_genres_rating_chart(data)
+    create_number_of_movies_each_5years(data)

@@ -17,6 +17,7 @@
 ![RatingAndVotes](assets/RatingAndVotes.png)
 ![RatingDistribution](assets/RatingDistribution.png)
 ![NumberOfMovies](assets/NumberOfMovies.png)
+![NumberOfMovies5Years](assets/NumberOfMoviesEach5Years.png)
 ![Genres](assets/Genres.png)
 ![genres_rating_sorted](assets/genres_rating.png)
 
